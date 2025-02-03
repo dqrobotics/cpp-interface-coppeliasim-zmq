@@ -765,7 +765,7 @@ void DQ_CoppeliaSimInterfaceZMQ::set_joint_torques(const std::vector<std::string
 double DQ_CoppeliaSimInterfaceZMQ::_get_joint_torque(const int &handle) const
 {
     _check_client();
-    return _ZMQWrapper::get_sim()->getJointForce(handle);
+    return -1*_ZMQWrapper::get_sim()->getJointForce(handle);
 }
 
 /**
