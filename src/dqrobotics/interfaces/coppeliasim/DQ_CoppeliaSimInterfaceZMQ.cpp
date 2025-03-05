@@ -707,16 +707,7 @@ void DQ_CoppeliaSimInterfaceZMQ::set_joint_target_velocities(const std::vector<s
 void DQ_CoppeliaSimInterfaceZMQ::_set_joint_torque(const int &handle, const double &torque) const
 {
     _check_client();
-    double angle_dot_rad_max = 10000.0;
-    if (torque==0)
-        angle_dot_rad_max = 0.0;
-    else if (torque<0)
-        angle_dot_rad_max = -10000.0;
-
-    //simxSetJointTargetVelocity(clientid_,handle,angle_dot_rad_max,_remap_op_mode(opmode));
-    //simxSetJointForce(clientid_,handle,abs(torque_f),_remap_op_mode(opmode));
-    _ZMQWrapper::get_sim()->setJointTargetVelocity(handle, angle_dot_rad_max);
-    _ZMQWrapper::get_sim()->setJointTargetForce(handle, abs(torque));
+    _ZMQWrapper::get_sim()->setJointTargetForce(handle, torque, true);
 }
 
 /**
@@ -765,7 +756,7 @@ void DQ_CoppeliaSimInterfaceZMQ::set_joint_torques(const std::vector<std::string
 double DQ_CoppeliaSimInterfaceZMQ::_get_joint_torque(const int &handle) const
 {
     _check_client();
-    return _ZMQWrapper::get_sim()->getJointForce(handle);
+    return -_ZMQWrapper::get_sim()->getJointForce(handle);
 }
 
 /**
