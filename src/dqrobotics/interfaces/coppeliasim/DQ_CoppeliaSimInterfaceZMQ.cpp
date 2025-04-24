@@ -749,20 +749,36 @@ void DQ_CoppeliaSimInterfaceZMQ::set_joint_torques(const std::vector<std::string
 }
 
 /**
- * @brief DQ_CoppeliaSimInterfaceZMQ::get_joint_torque
- * @param handle
- * @return
+ * @brief DQ_CoppeliaSimInterfaceZMQ::get_joint_torque retrieves the force or torque applied to a joint along/about its active axis.
+ * @param handle the object handle.
+ * @return The force or torque applied to a joint along/about its active axis.
  */
 double DQ_CoppeliaSimInterfaceZMQ::_get_joint_torque(const int &handle) const
 {
     _check_client();
+    /*
+    The getJointForce method retrieves the force or torque applied to a joint along/about its active axis.
+    This method uses the joint perspective, which returns an inverted signal value.
+    For instance, if the joint is set to a positive target force (e.g., using setJointTargetForce),
+    the direction of motion will follow the right-hand rule.
+    However, when using getJointForce, which uses the joint perspective, this motion is seen as clockwise,
+    resulting in a negative value.
+
+    More information:
+                       https://manual.coppeliarobotics.com/en/regularApi/simGetJointForce.htm
+                               https://forum.coppeliarobotics.com/viewtopic.php?p=41694&hilit=getJointForce#p41694
+
+    Therefore, to return a joint force using the same reference that
+    setJointTargetForce uses, we multiply it by -1.
+    */
     return -_ZMQWrapper::get_sim()->getJointForce(handle);
 }
 
 /**
- * @brief DQ_CoppeliaSimInterfaceZMQ::get_joint_torque
- * @param jointname
- * @return
+ * @brief DQ_CoppeliaSimInterfaceZMQ::get_joint_torque retrieves the force or torque applied to a joint
+ *          along/about its active axis.
+ * @param jointname The joint name
+ * @return the force or torque applied to a joint along/about its active axis.
  */
 double DQ_CoppeliaSimInterfaceZMQ::_get_joint_torque(const std::string &jointname)
 {
