@@ -70,8 +70,8 @@ MatrixXd _get_dh_matrix(const URXCoppeliaSimZMQRobot::MODEL& model)
 }
 
 URXCoppeliaSimZMQRobot::URXCoppeliaSimZMQRobot(const std::string &robot_name,
-                                         const std::shared_ptr<DQ_CoppeliaSimInterfaceZMQ> &coppeliasim_interface_sptr,
-                                         const MODEL &model)
+                                               const std::shared_ptr<DQ_CoppeliaSimInterfaceZMQExperimental> &coppeliasim_interface_sptr,
+                                               const MODEL &model)
     :DQ_CoppeliaSimRobotZMQ(robot_name, coppeliasim_interface_sptr), model_(model)
 {
 
