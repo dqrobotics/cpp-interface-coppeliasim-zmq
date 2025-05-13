@@ -33,9 +33,9 @@ jobs:
           sh .github/scripts/ubuntu/install.sh
           cd ..
 
-      - name: Build & install cpp-interface-coppeliasim (${{ matrix.testbranches }})
+      - name: Build & install cpp-interface-coppeliasim 
         run: |
-          git clone -b ${{ matrix.testbranches }} https://github.com/dqrobotics/cpp-interface-coppeliasim
+          git clone -b main https://github.com/dqrobotics/cpp-interface-coppeliasim
           cd cpp-interface-coppeliasim
           chmod +x debian/rules
           fakeroot debian/rules clean
