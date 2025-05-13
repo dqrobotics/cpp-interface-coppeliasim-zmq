@@ -32,7 +32,7 @@ binary-arch:
 
 # firstly called by launchpad
 clean:
-	rm -f build
+	rm -rf build
 	rm -rf $(BUILDDIR)
 
 .PHONY: binary binary-arch binary-indep clean
