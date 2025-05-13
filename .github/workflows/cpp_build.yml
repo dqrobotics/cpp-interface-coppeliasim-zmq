@@ -47,6 +47,7 @@ jobs:
           
       - name: Build & install cpp-interface-coppeliasim-zmq
         run: |
+          sudo apt install libzmq3-dev libboost-all-dev
           git checkout 
           chmod +x debian/rules
           fakeroot debian/rules clean
