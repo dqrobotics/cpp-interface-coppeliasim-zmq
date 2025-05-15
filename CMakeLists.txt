@@ -1,4 +1,6 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.5...3.26)
+# https://cmake.org/cmake/help/latest/variable/BUILD_SHARED_LIBS.html
+option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 
 project(dqrobotics-interface-coppeliasim-zmq LANGUAGES CXX)
 
@@ -15,7 +17,7 @@ INCLUDE_DIRECTORIES(${PROJECT_NAME} ${SUBMODULES}/zmqRemoteApi/clients/cpp)
 
 
 
-add_library(${PROJECT_NAME} SHARED
+add_library(${PROJECT_NAME} 
     src/dqrobotics/interfaces/coppeliasim/internal/_zmq_wrapper.cpp
     src/dqrobotics/interfaces/coppeliasim/DQ_CoppeliaSimInterfaceZMQ.cpp
     src/dqrobotics/interfaces/coppeliasim/DQ_CoppeliaSimInterfaceZMQExperimental.cpp
