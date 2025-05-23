@@ -1,5 +1,5 @@
 /**
-(C) Copyright 2024 DQ Robotics Developers
+(C) Copyright 2011-2025 DQ Robotics Developers
 
 This file is based on DQ Robotics.
 
@@ -962,7 +962,6 @@ void DQ_CoppeliaSimInterfaceZMQ::_check_client() const
 
 [[noreturn]] void DQ_CoppeliaSimInterfaceZMQ::_throw_runtime_error(const std::string &msg) const
 {
-    stop_simulation();
-    std::cerr<<"Something went wrong. I stopped the simulation!"<<std::endl;
+    std::cerr<<"Something went wrong!"<<std::endl;
     throw std::runtime_error(msg);
 }
