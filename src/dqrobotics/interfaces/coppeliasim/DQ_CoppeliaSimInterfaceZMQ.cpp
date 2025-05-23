@@ -286,7 +286,7 @@ std::vector<int> DQ_CoppeliaSimInterfaceZMQ::get_object_handles(const std::vecto
     int n = objectnames.size();
     std::vector<int> handles(n);
     for(auto i=0;i<n;i++)
-        handles[i]=get_object_handle(objectnames.at(i));
+        handles.at(i) =get_object_handle(objectnames.at(i));
 
     return handles;
 }
