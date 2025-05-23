@@ -286,7 +286,7 @@ std::vector<int> DQ_CoppeliaSimInterfaceZMQ::get_object_handles(const std::vecto
     int n = objectnames.size();
     std::vector<int> handles(n);
     for(auto i=0;i<n;i++)
-        handles[i]=get_object_handle(objectnames[i]);
+        handles.at(i) =get_object_handle(objectnames.at(i));
 
     return handles;
 }
@@ -500,7 +500,7 @@ VectorXd DQ_CoppeliaSimInterfaceZMQ::get_joint_positions(const std::vector<std::
     int n = jointnames.size();
     VectorXd joint_positions(n);
     for(auto i=0;i<n;i++)
-        joint_positions(i)=_get_joint_position(jointnames[i]);
+        joint_positions(i)=_get_joint_position(jointnames.at(i));
 
     return joint_positions;
 }
@@ -645,7 +645,7 @@ VectorXd DQ_CoppeliaSimInterfaceZMQ::get_joint_velocities(const std::vector<std:
     int n = jointnames.size();
     VectorXd joint_velocities(n);
     for(auto i=0;i<n;i++)
-        joint_velocities(i)=_get_joint_velocity(jointnames[i]);
+        joint_velocities(i)=_get_joint_velocity(jointnames.at(i));
 
     return joint_velocities;
 }
@@ -810,7 +810,7 @@ VectorXd DQ_CoppeliaSimInterfaceZMQ::get_joint_torques(const std::vector<std::st
     int n = jointnames.size();
     VectorXd joint_torques(n);
     for(auto i=0;i<n;i++)
-        joint_torques(i)=_get_joint_torque(jointnames[i]);
+        joint_torques(i)=_get_joint_torque(jointnames.at(i));
 
     return joint_torques;
 }
