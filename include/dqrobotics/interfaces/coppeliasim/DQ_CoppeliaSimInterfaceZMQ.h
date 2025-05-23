@@ -74,18 +74,7 @@ public:
                                const VectorXd& torques) override;
     VectorXd get_joint_torques(const std::vector<std::string>& jointnames) override;
 
-    std::string _get_object_name(const int& handle);
-
-    template<typename T>
-    std::vector<std::string> _get_object_names(const T &handles)
-    {
-        int n = handles.size();
-        std::vector<std::string> objectnames(n);
-        for(auto i=0;i<n;i++)
-            objectnames.at(i)=_get_object_name(handles.at(i));
-
-        return objectnames;
-    }
+    std::vector<std::string> get_jointnames_from_object(const std::string& objectname);
 
     //-----------------------------------------------------------------------------------------------------//
     //-----------Deprecated methods------------------------------------------------------------------------//
@@ -203,6 +192,19 @@ protected:
     {
         if (static_cast<std::size_t>(v1.size()) != static_cast<std::size_t>(v2.size()))
             throw std::runtime_error(error_message);
+    }
+
+    std::string _get_object_name(const int& handle);
+
+    template<typename T>
+    std::vector<std::string> _get_object_names(const T &handles)
+    {
+        int n = handles.size();
+        std::vector<std::string> objectnames(n);
+        for(auto i=0;i<n;i++)
+            objectnames.at(i)=_get_object_name(handles.at(i));
+
+        return objectnames;
     }
 };
 
