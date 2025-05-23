@@ -38,8 +38,8 @@ public:
 
 public:
     URXCoppeliaSimZMQRobot(const std::string& robot_name,
-                        const std::shared_ptr<DQ_CoppeliaSimInterfaceZMQ>& coppeliasim_interface_sptr,
-                        const MODEL& model = MODEL::UR5);
+        const std::shared_ptr<DQ_CoppeliaSimInterfaceZMQExperimental>& coppeliasim_interface_sptr,
+        const MODEL& model = MODEL::UR5);
     DQ_SerialManipulatorDH kinematics();
 private:
     URXCoppeliaSimZMQRobot::MODEL model_;
