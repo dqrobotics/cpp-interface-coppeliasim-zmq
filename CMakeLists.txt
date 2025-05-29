@@ -7,9 +7,8 @@ project(dqrobotics-interface-coppeliasim-zmq LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+find_package(Eigen3 REQUIRED)
 find_package(cppzmq REQUIRED)
-
-add_subdirectory(submodules/jsoncons)
 
 add_library(${PROJECT_NAME} 
     src/dqrobotics/interfaces/coppeliasim/internal/_zmq_wrapper.cpp
@@ -38,6 +37,7 @@ if(APPLE)
             ${Boost_LIBRARIES}
             cppzmq
             dqrobotics
+            Eigen3::Eigen
     )
 endif()
 if(UNIX AND NOT APPLE)
@@ -45,13 +45,13 @@ if(UNIX AND NOT APPLE)
             ${Boost_LIBRARIES}
             zmq
             dqrobotics
+            Eigen3::Eigen
     )
 endif()
 
-include_directories(${SOURCE_DIR})
-set_source_files_properties(RemoteAPIClient.h OBJECT_DEPENDS ${SOURCE_DIR}/RemoteAPIObjects.h)
-set_source_files_properties(RemoteAPIClient.cpp OBJECT_DEPENDS ${SOURCE_DIR}/RemoteAPIObjects.cpp)
-
+#include_directories(${SOURCE_DIR})
+#set_source_files_properties(RemoteAPIClient.h OBJECT_DEPENDS ${SOURCE_DIR}/RemoteAPIObjects.h)
+#set_source_files_properties(RemoteAPIClient.cpp OBJECT_DEPENDS ${SOURCE_DIR}/RemoteAPIObjects.cpp)
 
 SET_TARGET_PROPERTIES(${PROJECT_NAME}
     PROPERTIES PUBLIC_HEADER
