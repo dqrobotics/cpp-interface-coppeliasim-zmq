@@ -6,16 +6,10 @@ project(dqrobotics-interface-coppeliasim-zmq LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-include(${CMAKE_CURRENT_SOURCE_DIR}/dependencies.cmake)
 
-set(SUBMODULES ${CMAKE_CURRENT_SOURCE_DIR}/submodules)
-set(ZMQ_REMOTE_API_PATH ${SUBMODULES}/zmqRemoteApi/)
-set(SOURCE_DIR ${ZMQ_REMOTE_API_PATH}/clients/cpp)
+find_package(cppzmq REQUIRED)
 
-INCLUDE_DIRECTORIES(${PROJECT_NAME} include)
-INCLUDE_DIRECTORIES(${PROJECT_NAME} ${SUBMODULES}/zmqRemoteApi/clients/cpp)
-
-
+add_subdirectory(submodules/jsoncons)
 
 add_library(${PROJECT_NAME} 
     src/dqrobotics/interfaces/coppeliasim/internal/_zmq_wrapper.cpp
@@ -29,8 +23,15 @@ add_library(${PROJECT_NAME}
 
   )
 
-target_compile_definitions(${PROJECT_NAME} PUBLIC -DSIM_REMOTEAPICLIENT_OBJECTS)
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/jsoncons/include)
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+        -DSIM_REMOTEAPICLIENT_OBJECTS
+)
+
+target_include_directories(${PROJECT_NAME} PRIVATE
+        include
+        submodules/jsoncons/include
+        submodules/zmqRemoteApi/clients/cpp
+)
 
 if(APPLE)
     target_link_libraries(${PROJECT_NAME}

@@ -1,9 +1,6 @@
 [submodule "submodules/jsoncons"]
 	path = submodules/jsoncons
 	url = https://github.com/danielaparker/jsoncons.git
-[submodule "submodules/cppzmq"]
-	path = submodules/cppzmq
-	url = https://github.com/zeromq/cppzmq.git
 [submodule "submodules/zmqRemoteApi"]
 	path = submodules/zmqRemoteApi
 	url = https://github.com/CoppeliaRobotics/zmqRemoteApi.git
