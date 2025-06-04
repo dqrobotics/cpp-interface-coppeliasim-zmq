@@ -8,7 +8,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Eigen3 REQUIRED)
-find_package(cppzmq REQUIRED)
+if (APPLE)
+    find_package(cppzmq REQUIRED)
+endif()
 
 add_library(${PROJECT_NAME} 
     src/dqrobotics/interfaces/coppeliasim/internal/_zmq_wrapper.cpp
