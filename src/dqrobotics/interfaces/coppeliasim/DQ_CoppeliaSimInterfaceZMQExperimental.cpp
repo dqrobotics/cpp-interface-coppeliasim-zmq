@@ -1495,9 +1495,8 @@ std::tuple<DQ, MatrixXd> DQ_CoppeliaSimInterfaceZMQExperimental::get_center_of_m
                                                         inertia_matrix_coeff.size()).reshaped(3,3);
     MatrixXd COM_body_frame_matrix =  get_transformation_matrix(center_of_mass_coeff);
     DQ COM_body_frame = DQ(COM_body_frame_matrix.col(3));
-    double mass = get_mass(handle);
 
-    return {COM_body_frame, Inertia_maxtrix_body_frame/mass};
+    return {COM_body_frame, Inertia_maxtrix_body_frame};
 }
 
 /**
