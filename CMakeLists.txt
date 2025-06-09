@@ -10,6 +10,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Eigen3 REQUIRED)
 if (APPLE)
     find_package(cppzmq REQUIRED)
+
+    # The DQ Robotics library is installed in /usr/local/include/ on macOS platforms.
+    # The following directives are required to find and link the DQ Robotics to the
+    # dqrobotics-interface-coppeliasim-zmq. Otherwise, this project could not compile
+    # from sources on macOS, as reported in
+    # https://github.com/dqrobotics/cpp-interface-coppeliasim-zmq/issues/16
+    INCLUDE_DIRECTORIES(/usr/local/include/)
+    LINK_DIRECTORIES(/usr/local/lib/)
 endif()
 
 add_library(${PROJECT_NAME} 
