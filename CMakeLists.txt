@@ -10,6 +10,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Eigen3 REQUIRED)
 if (APPLE)
     find_package(cppzmq REQUIRED)
+    INCLUDE_DIRECTORIES(/usr/local/include/)
+    LINK_DIRECTORIES(/usr/local/lib/)
 endif()
 
 add_library(${PROJECT_NAME} 
