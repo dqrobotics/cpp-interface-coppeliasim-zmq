@@ -196,7 +196,7 @@ protected:
 
     std::string _get_object_name(const int& handle);
 
-    template<typename T>
+    template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value>::type>
     std::vector<std::string> _get_object_names(const std::vector<T>& handles)
     {
         int n = handles.size();
