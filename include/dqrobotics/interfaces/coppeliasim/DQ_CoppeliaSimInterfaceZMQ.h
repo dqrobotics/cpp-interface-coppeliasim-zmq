@@ -197,7 +197,7 @@ protected:
     std::string _get_object_name(const int& handle);
 
     template<typename T>
-    std::vector<std::string> _get_object_names(const T &handles)
+    std::vector<std::string> _get_object_names(const std::vector<T>& handles)
     {
         int n = handles.size();
         std::vector<std::string> objectnames(n);
