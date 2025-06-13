@@ -816,6 +816,22 @@ VectorXd DQ_CoppeliaSimInterfaceZMQ::get_joint_torques(const std::vector<std::st
 }
 
 /**
+ * @brief DQ_CoppeliaSimInterfaceZMQ::get_jointnames_from_object gets all the names of the joints under the hierarchy tree,
+ *                      in which the object name describes its base.
+ * @param objectname The parent object name of the joints.
+ * @return A vector containing the jointnames.
+ */
+std::vector<std::string> DQ_CoppeliaSimInterfaceZMQ::get_jointnames_from_object(const std::string &objectname)
+{
+    _check_client();
+    std::vector<int64_t> jointhandles = _ZMQWrapper::get_sim()->getObjectsInTree(_get_handle_from_map(objectname),
+                                                                                 _ZMQWrapper::get_sim()->object_joint_type,
+                                                                                 0);
+    return _get_object_names(jointhandles);
+}
+
+
+/**
  * @brief DQ_CoppeliaSimInterfaceZMQ::get_object_name gets the name of an object in the CoppeliaSim scene
  * @param handle the object handle.
  * @return The object name
