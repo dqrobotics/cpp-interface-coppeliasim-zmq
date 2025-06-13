@@ -185,6 +185,13 @@ protected:
     VectorXd _get_joint_torques(const std::vector<int>& handles) const;
 
 
+    /**
+     * @brief _check_sizes This method throws an exception with a desired message if
+                           the sizes of v1 and v2 are different.
+     * @param v1 The first vector to be compared (Eigen::VectorXd or std::vector<>)
+     * @param v2 The second vector to be compared (Eigen::VectorXd or std::vector<>)
+     * @param error_message The message to be displayed when the exception is raised.
+     */
     template <typename T, typename U>
     void _check_sizes(const T &v1,
                       const U &v2,
@@ -196,6 +203,12 @@ protected:
 
     std::string _get_object_name(const int& handle);
 
+
+    /**
+     * @brief _get_object_names This method gets the object names in the CoppeliaSim scene.
+     * @param handles The object handles.
+     * @return The desired object names.
+     */
     template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value>::type>
     std::vector<std::string> _get_object_names(const std::vector<T>& handles)
     {
