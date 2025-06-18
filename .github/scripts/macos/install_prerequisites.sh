@@ -1,1 +1,2 @@
-brew install cppzmq boost
+brew install cppzmq 
+brew install boost
