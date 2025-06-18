@@ -18,9 +18,9 @@ jobs:
       - run: | 
           git clone -b ${{ matrix.testbranches }} https://github.com/dqrobotics/cpp
           cd cpp
-          ./.github/scripts/macos/install_prerequisites.sh
-          ./.github/scripts/macos/build.sh
-          ./.github/scripts/macos/install.sh
+          sh ./.github/scripts/macos/install_prerequisites.sh
+          sh ./.github/scripts/macos/build.sh
+          sh ./.github/scripts/macos/install.sh
 
       - name: Install prerequisites
         run: sh .github/scripts/macos/install_prerequisites.sh
