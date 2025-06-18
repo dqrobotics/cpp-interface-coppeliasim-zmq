@@ -38,16 +38,16 @@ jobs:
         run: | 
           git clone https://github.com/dqrobotics/cpp-interface-coppeliasim
           cd .\cpp-interface-coppeliasim\
-          .\.github\scripts\windows\build.ps1
+          .\cpp\.github\scripts\windows\build.ps1
           
       - name: Build interface-coppeliasim-zmq 
         run: |
           cd .\cpp-interface-coppeliasim\
-          .\.github\scripts\windows\build.ps1
+          .\cpp\.github\scripts\windows\build.ps1
           
       - name: Install interface-coppeliasim-zmq 
         run: |
           cd .\cpp-interface-coppeliasim\
-          .\.github\scripts\windows\install.ps1
+          .\cpp\.github\scripts\windows\install.ps1
           
 
