@@ -23,7 +23,8 @@ jobs:
           sh ./.github/scripts/macos/install.sh
 
       - name: Install prerequisites
-        run: sh .github/scripts/macos/install_prerequisites.sh
+        #run: sh .github/scripts/macos/install_prerequisites.sh
+        run: brew install cppzmq boost
           
       - name: Build
         run: sh cpp/.github/scripts/macos/build.sh
