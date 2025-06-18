@@ -2,6 +2,22 @@ cmake_minimum_required(VERSION 3.5...3.26)
 # https://cmake.org/cmake/help/latest/variable/BUILD_SHARED_LIBS.html
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 
+
+
+if(WIN32)
+    set(CMAKE_TOOLCHAIN_FILE C:/vcpkg/scripts/buildsystems/vcpkg.cmake)
+    # A must so that we don't need to manually export each public part of the library
+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+    ADD_DEFINITIONS(-D_USE_MATH_DEFINES)
+    set(DQROBOTICS_PATH "C:/Program Files (x86)/dqrobotics")
+    add_library(dqrobotics SHARED IMPORTED)
+    set_target_properties(dqrobotics PROPERTIES
+        IMPORTED_LOCATION ${DQROBOTICS_PATH}/bin/dqrobotics.dll
+        IMPORTED_IMPLIB   ${DQROBOTICS_PATH}/lib/dqrobotics.lib
+        INTERFACE_INCLUDE_DIRECTORIES ${DQROBOTICS_PATH}/include)
+endif()
+
+
 project(dqrobotics-interface-coppeliasim-zmq LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -58,6 +74,19 @@ if(UNIX AND NOT APPLE)
             Eigen3::Eigen
     )
 endif()
+if(WIN32)
+    #.\vcpkg install boost-format
+    #.\vcpkg install cppzmq
+    find_package(Boost REQUIRED COMPONENTS format)
+    find_package(cppzmq CONFIG REQUIRED)
+    INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
+    target_link_libraries(${PROJECT_NAME}
+                            Boost::format
+                            cppzmq
+                            dqrobotics
+                            )
+endif()
+
 
 #include_directories(${SOURCE_DIR})
 #set_source_files_properties(RemoteAPIClient.h OBJECT_DEPENDS ${SOURCE_DIR}/RemoteAPIObjects.h)
