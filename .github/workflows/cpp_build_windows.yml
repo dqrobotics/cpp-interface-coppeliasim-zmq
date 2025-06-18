@@ -1,0 +1,34 @@
+name: CPP Build Windows
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        testbranches: ['release','master']
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Install DQ Robotics
+      - run: | 
+          git clone -b ${{ matrix.testbranches }} https://github.com/dqrobotics/cpp
+          cd cpp
+          .\.github\scripts\windows\install_prerequisites.ps1
+          .\.github\scripts\windows\build.ps1
+          .\.github\scripts\windows\install.ps1
+
+      - name: Install prerequisites
+        run: .github\scripts\windows\install_prerequisites.ps1
+          
+      - name: Build
+        run: .github\scripts\windows\build.ps1
+          
+      - name: Install
+        run: .github\scripts\windows\install.ps1
+          
+
