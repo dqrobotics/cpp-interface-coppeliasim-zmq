@@ -36,7 +36,7 @@ jobs:
 
       - name: Install cpp-interface-coppeliasim
         run: | 
-          git clone -b ${{ matrix.testbranches }} https://github.com/dqrobotics/cpp-interface-coppeliasim
+          git clone https://github.com/dqrobotics/cpp-interface-coppeliasim
           cd .\cpp-interface-coppeliasim\
           .\cpp\.github\scripts\windows\install_prerequisites.ps1
           
