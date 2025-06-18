@@ -43,7 +43,7 @@ jobs:
       - name: Install cpp-interface-coppeliasim
         run: | 
           cd .\cpp-interface-coppeliasim\
-          ..\cpp\.github\scripts\windows\install.ps1
+          ..\.github\scripts\windows\install.ps1
           
       - name: Build cpp-interface-coppeliasim-zmq
         run: .\cpp\.github\scripts\windows\build.ps1
