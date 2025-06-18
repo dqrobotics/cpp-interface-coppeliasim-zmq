@@ -26,9 +26,9 @@ jobs:
         run: .github\scripts\windows\install_prerequisites.ps1
           
       - name: Build
-        run: .github\scripts\windows\build.ps1
+        run: cpp\.github\scripts\windows\build.ps1
           
       - name: Install
-        run: .github\scripts\windows\install.ps1
+        run: cpp\.github\scripts\windows\install.ps1
           
 
