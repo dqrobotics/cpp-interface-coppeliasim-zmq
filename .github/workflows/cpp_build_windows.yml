@@ -34,20 +34,21 @@ jobs:
           cd .\cpp\
           .\.github\scripts\windows\install.ps1
 
-      - name: Install cpp-interface-coppeliasim
+      - name: Build cpp-interface-coppeliasim
         run: | 
           git clone https://github.com/dqrobotics/cpp-interface-coppeliasim
           cd .\cpp-interface-coppeliasim\
           ..\cpp\.github\scripts\windows\build.ps1
           
-      - name: Build interface-coppeliasim-zmq 
-        run: |
-          cd .\cpp-interface-coppeliasim\
-          ..\cpp\.github\scripts\windows\build.ps1
-          
-      - name: Install interface-coppeliasim-zmq 
-        run: |
+      - name: Install cpp-interface-coppeliasim
+        run: | 
           cd .\cpp-interface-coppeliasim\
           ..\cpp\.github\scripts\windows\install.ps1
+          
+      - name: Build cpp-interface-coppeliasim-zmq
+        run: .\cpp\.github\scripts\windows\build.ps1
+          
+      - name: Install cpp-interface-coppeliasim-zmq
+        run: .\cpp\.github\scripts\windows\install.ps1
           
 
