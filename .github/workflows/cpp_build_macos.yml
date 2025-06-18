@@ -26,7 +26,17 @@ jobs:
 
       - name: Install prerequisites
         run: sh ./.github/scripts/macos/install_prerequisites.sh
-        #run: brew install cppzmq boost
+
+      - name: Build cpp-interface-coppeliasim
+        run: | 
+          git clone https://github.com/dqrobotics/cpp-interface-coppeliasim
+          cd cpp-interface-coppeliasim
+          ../cpp/.github/scripts/macos/build.sh
+          
+      - name: Install cpp-interface-coppeliasim
+        run: | 
+          cd cpp-interface-coppeliasim
+          ../cpp/.github/scripts/macos/install.sh
           
       - name: Build
         run: sh cpp/.github/scripts/macos/build.sh
