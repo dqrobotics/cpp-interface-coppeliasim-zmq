@@ -19,19 +19,23 @@ jobs:
           git clone -b ${{ matrix.testbranches }} https://github.com/dqrobotics/cpp
           .\cpp\.github\scripts\windows\install_prerequisites.ps1
 
+      - name: Install interface-coppeliasim-zmq prerequisites
+        run: .\.github\scripts\windows\install_prerequisites.ps1
+
       - name: Build DQ Robotics
-        run: .\cpp\.github\scripts\windows\build.ps1
+        run: |
+          cd .\cpp\
+          \.github\scripts\windows\build.ps1
 
       - name: Install DQ Robotics
-        run: .\cpp\.github\scripts\windows\install.ps1
-
-      - name: Install prerequisites
-        run: .\.github\scripts\windows\install_prerequisites.ps1
+        run: |
+          cd .\cpp\
+          .\cpp\.github\scripts\windows\install.ps1
           
-      - name: Build
+      - name: Build interface-coppeliasim-zmq 
         run: .\cpp\.github\scripts\windows\build.ps1
           
-      - name: Install
+      - name: Install interface-coppeliasim-zmq 
         run: .\cpp\.github\scripts\windows\install.ps1
           
 
