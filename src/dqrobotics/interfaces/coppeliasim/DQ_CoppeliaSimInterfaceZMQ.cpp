@@ -177,7 +177,7 @@ bool DQ_CoppeliaSimInterfaceZMQ::connect(const std::string &host, const int &por
 int DQ_CoppeliaSimInterfaceZMQ::_get_port_from_deprecated_default_port(const int &port)
 {
     int auxport = port;
-    if (auxport == 19997 or auxport == 19998 or auxport == 19999 or auxport == 20000)
+    if (auxport == 19997 || auxport == 19998 || auxport == 19999 || auxport == 20000)
     {
         auxport = 23000;
         std::cerr<<"The port "<<port<<" is commonly used in the legacy API. However it is not compatible with the ZMQ Remote API."<<std::endl;

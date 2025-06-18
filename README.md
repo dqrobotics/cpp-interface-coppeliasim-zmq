@@ -85,6 +85,7 @@ Required vcpkg packages:
 
 ```shell
 .\vcpkg install cppzmq
+.\vcpkg install boost-format
 ```
 
 

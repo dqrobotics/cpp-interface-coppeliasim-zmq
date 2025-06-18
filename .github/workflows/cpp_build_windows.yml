@@ -1,0 +1,54 @@
+name: CPP Build Windows
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        testbranches: ['release','master']
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: 'true'
+      
+      - name: Install DQ Robotics prerequisites
+        run: | 
+          git clone -b ${{ matrix.testbranches }} https://github.com/dqrobotics/cpp
+          .\cpp\.github\scripts\windows\install_prerequisites.ps1
+
+      - name: Install interface-coppeliasim-zmq prerequisites
+        run: .\.github\scripts\windows\install_prerequisites.ps1
+
+      - name: Build DQ Robotics
+        run: |
+          cd .\cpp\
+          .\.github\scripts\windows\build.ps1
+
+      - name: Install DQ Robotics
+        run: |
+          cd .\cpp\
+          .\.github\scripts\windows\install.ps1
+
+      - name: Build cpp-interface-coppeliasim
+        run: | 
+          git clone https://github.com/dqrobotics/cpp-interface-coppeliasim
+          cd .\cpp-interface-coppeliasim\
+          ..\cpp\.github\scripts\windows\build.ps1
+          
+      - name: Install cpp-interface-coppeliasim
+        run: | 
+          cd .\cpp-interface-coppeliasim\
+          ..\.github\scripts\windows\install.ps1
+          
+      - name: Build cpp-interface-coppeliasim-zmq
+        run: .\cpp\.github\scripts\windows\build.ps1
+          
+      - name: Install cpp-interface-coppeliasim-zmq
+        run: .\cpp\.github\scripts\windows\install.ps1
+          
+
