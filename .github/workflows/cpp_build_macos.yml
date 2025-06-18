@@ -31,12 +31,12 @@ jobs:
         run: | 
           git clone https://github.com/dqrobotics/cpp-interface-coppeliasim
           cd cpp-interface-coppeliasim
-          ../cpp/.github/scripts/macos/build.sh
+          sh ../cpp/.github/scripts/macos/build.sh
           
       - name: Install cpp-interface-coppeliasim
         run: | 
           cd cpp-interface-coppeliasim
-          ../cpp/.github/scripts/macos/install.sh
+          sh ../cpp/.github/scripts/macos/install.sh
           
       - name: Build
         run: sh cpp/.github/scripts/macos/build.sh
