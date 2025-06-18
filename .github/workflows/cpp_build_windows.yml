@@ -30,7 +30,7 @@ jobs:
       - name: Install DQ Robotics
         run: |
           cd .\cpp\
-          .\cpp\.github\scripts\windows\install.ps1
+          .\.github\scripts\windows\install.ps1
           
       - name: Build interface-coppeliasim-zmq 
         run: .\cpp\.github\scripts\windows\build.ps1
