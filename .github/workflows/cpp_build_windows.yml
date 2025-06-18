@@ -25,7 +25,7 @@ jobs:
       - name: Build DQ Robotics
         run: |
           cd .\cpp\
-          \.github\scripts\windows\build.ps1
+          .\.github\scripts\windows\build.ps1
 
       - name: Install DQ Robotics
         run: |
