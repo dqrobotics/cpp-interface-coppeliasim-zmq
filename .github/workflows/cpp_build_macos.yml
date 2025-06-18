@@ -1,0 +1,41 @@
+name: CPP Build MacOS
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        testbranches: ['release','master']
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Install DQ Robotics
+      - run: | 
+          git clone -b ${{ matrix.testbranches }} https://github.com/dqrobotics/cpp
+          cd cpp
+          ./.github/scripts/macos/install_prerequisites.sh
+          ./.github/scripts/macos/build.sh
+          ./.github/scripts/macos/install.sh
+
+      - name: Install prerequisites
+        run: sh .github/scripts/macos/install_prerequisites.sh
+          
+      - name: Build
+        run: sh cpp/.github/scripts/macos/build.sh
+          
+      - name: Install
+        run: sh cpp/.github/scripts/macos/install.sh
+          
+      - name: Download examples ((${{ matrix.testbranches }}))
+        run: git clone -b ${{ matrix.testbranches }} https://github.com/dqrobotics/cpp-examples.git
+        
+      - name: Build pure examples
+        run: |
+          cd cpp-examples
+          chmod +x .build_pure.sh
+          ./.build_pure.sh
