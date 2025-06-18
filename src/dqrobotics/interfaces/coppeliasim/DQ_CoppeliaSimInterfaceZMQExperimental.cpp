@@ -872,7 +872,7 @@ void DQ_CoppeliaSimInterfaceZMQExperimental::create_reference_frame(const std::s
 void DQ_CoppeliaSimInterfaceZMQExperimental::draw_permanent_trajectory(const DQ &point, const double &size, const std::vector<double> &color, const int &max_item_count)
 {
     _check_client();
-    if (!is_pure(point) or !is_quaternion(point))
+    if (!is_pure(point) || !is_quaternion(point))
     {
         // For C++20
         // std::string function_name = static_cast<std::string>(std::source_location::current().function_name());
@@ -1549,9 +1549,9 @@ void DQ_CoppeliaSimInterfaceZMQExperimental::plot_plane(const std::string &name,
     // std::string function_name = static_cast<std::string>(std::source_location::current().function_name());
     std::string function_name = {"DQ_CoppeliaSimInterface::plot_plane"};
 
-    if (!is_unit(normal_to_the_plane) or !is_quaternion(normal_to_the_plane))
+    if (!is_unit(normal_to_the_plane) || !is_quaternion(normal_to_the_plane))
         _throw_runtime_error(function_name + ". The normal to the plane must be a unit quaternion!");
-    if (!is_pure(location) or !is_quaternion(location))
+    if (!is_pure(location) || !is_quaternion(location))
         _throw_runtime_error(function_name + ". The location must be a pure quaternion!");
 
     if (sizes.size() != 2)
@@ -1583,10 +1583,10 @@ void DQ_CoppeliaSimInterfaceZMQExperimental::plot_line(const std::string &name, 
     // std::string function_name = static_cast<std::string>(std::source_location::current().function_name());
     std::string function_name = {"DQ_CoppeliaSimInterface::plot_line"};
 
-    if (!is_unit(line_direction) or !is_quaternion(line_direction))
+    if (!is_unit(line_direction) || !is_quaternion(line_direction))
         _throw_runtime_error(function_name + ". The line direction must be a unit quaternion!");
 
-    if (!is_pure(location) or !is_quaternion(location))
+    if (!is_pure(location) || !is_quaternion(location))
         _throw_runtime_error(function_name + ". The location must be a pure quaternion!");
 
     if (thickness_and_length.size() != 2)
@@ -1617,10 +1617,10 @@ void DQ_CoppeliaSimInterfaceZMQExperimental::plot_cylinder(const std::string &na
     // For C++20
     // std::string function_name = static_cast<std::string>(std::source_location::current().function_name());
     std::string function_name = {"DQ_CoppeliaSimInterface::plot_cylinder"};
-    if (!is_unit(direction) or !is_quaternion(direction))
+    if (!is_unit(direction) || !is_quaternion(direction))
         _throw_runtime_error(function_name + ". The line direction must be a unit quaternion!");
 
-    if (!is_pure(location) or !is_quaternion(location))
+    if (!is_pure(location) || !is_quaternion(location))
         _throw_runtime_error(function_name + ". The location must be a pure quaternion!");
 
     if (width_and_length.size() != 2)
@@ -1649,7 +1649,7 @@ void DQ_CoppeliaSimInterfaceZMQExperimental::plot_sphere(const std::string &name
     // std::string function_name = static_cast<std::string>(std::source_location::current().function_name());
     std::string function_name = {"DQ_CoppeliaSimInterface::plot_sphere"};
 
-    if (!is_pure(location) or !is_quaternion(location))
+    if (!is_pure(location) || !is_quaternion(location))
         _throw_runtime_error(function_name + ". The location must be a pure quaternion!");
     if (rgba_color.size() != 4)
         _throw_runtime_error(function_name + ". The rgba_color must be vector of size 4.");
