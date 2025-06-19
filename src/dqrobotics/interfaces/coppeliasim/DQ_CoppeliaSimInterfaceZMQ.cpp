@@ -700,60 +700,60 @@ void DQ_CoppeliaSimInterfaceZMQ::set_joint_target_velocities(const std::vector<s
 }
 
 /**
- * @brief DQ_CoppeliaSimInterfaceZMQ::set_joint_torque
- * @param handle
- * @param torque
+ * @brief DQ_CoppeliaSimInterfaceZMQ::set_joint_force sets the joint target force in the CoppeliaSim scene.
+ * @param handle The join handle
+ * @param force The desired target force.
  */
-void DQ_CoppeliaSimInterfaceZMQ::_set_joint_torque(const int &handle, const double &torque) const
+void DQ_CoppeliaSimInterfaceZMQ::_set_joint_force(const int &handle, const double &force) const
 {
     _check_client();
-    _ZMQWrapper::get_sim()->setJointTargetForce(handle, torque, true);
+    _ZMQWrapper::get_sim()->setJointTargetForce(handle, force, true);
 }
 
 /**
- * @brief DQ_CoppeliaSimInterfaceZMQ::set_joint_torque
- * @param jointname
- * @param torque
+ * @brief DQ_CoppeliaSimInterfaceZMQ::set_joint_force sets the joint target force in the CoppeliaSim scene.
+ * @param jointname The joint name
+ * @param force The desired target force.
  */
-void DQ_CoppeliaSimInterfaceZMQ::_set_joint_torque(const std::string &jointname, const double &torque)
+void DQ_CoppeliaSimInterfaceZMQ::_set_joint_force(const std::string &jointname, const double &force)
 {
-    _set_joint_torque(_get_handle_from_map(jointname), torque);
+    _set_joint_force(_get_handle_from_map(jointname), force);
 }
 
 /**
- * @brief DQ_CoppeliaSimInterfaceZMQ::set_joint_torques
- * @param handles
- * @param torques
+ * @brief DQ_CoppeliaSimInterfaceZMQ::set_joint_forces sets the joint target forces in the CoppeliaSim scene.
+ * @param handles A vector containing the handles of the joints.
+ * @param forces The desired joint forces.
  */
-void DQ_CoppeliaSimInterfaceZMQ::_set_joint_torques(const std::vector<int> &handles, const VectorXd &torques) const
+void DQ_CoppeliaSimInterfaceZMQ::_set_joint_forces(const std::vector<int> &handles, const VectorXd &forces) const
 {
     for(std::size_t i=0;i<handles.size();i++)
-        _set_joint_torque(handles.at(i), torques(i));
+        _set_joint_force(handles.at(i), forces(i));
 }
 
 
 /**
- * @brief DQ_CoppeliaSimInterfaceZMQ::set_joint_torques sets the joint torques in the CoppeliaSim scene.
+ * @brief DQ_CoppeliaSimInterfaceZMQ::set_joint_target_forces sets the joint target forces in the CoppeliaSim scene.
  *                      This method requires a dynamics enabled scene, and joints in dynamic mode with force control mode.
  *                      Check this link for more information about joint modes:
  *                      https://www.coppeliarobotics.com/helpFiles/en/jointModes.htm
  * @param jointnames A vector containing the names of the joints.
  * @param torques The desired joint torques.
  */
-void DQ_CoppeliaSimInterfaceZMQ::set_joint_torques(const std::vector<std::string> &jointnames, const VectorXd &torques)
+void DQ_CoppeliaSimInterfaceZMQ::set_joint_target_forces(const std::vector<std::string> &jointnames, const VectorXd &forces)
 {
-    _check_sizes(jointnames, torques, "Error in DQ_CoppeliaSimInterface::set_joint_torques: "
+    _check_sizes(jointnames, forces, "Error in DQ_CoppeliaSimInterface::set_joint_target_forces: "
                                       "jointnames and torques have incompatible sizes");
     for(std::size_t i=0;i<jointnames.size();i++)
-        _set_joint_torque(jointnames.at(i), torques(i));
+        _set_joint_force(jointnames.at(i), forces(i));
 }
 
 /**
- * @brief DQ_CoppeliaSimInterfaceZMQ::get_joint_torque retrieves the force or torque applied to a joint along/about its active axis.
+ * @brief DQ_CoppeliaSimInterfaceZMQ::get_joint_force retrieves the force or torque applied to a joint along/about its active axis.
  * @param handle the object handle.
  * @return The force or torque applied to a joint along/about its active axis.
  */
-double DQ_CoppeliaSimInterfaceZMQ::_get_joint_torque(const int &handle) const
+double DQ_CoppeliaSimInterfaceZMQ::_get_joint_force(const int &handle) const
 {
     _check_client();
     /*
@@ -780,39 +780,40 @@ double DQ_CoppeliaSimInterfaceZMQ::_get_joint_torque(const int &handle) const
  * @param jointname The joint name
  * @return the force or torque applied to a joint along/about its active axis.
  */
-double DQ_CoppeliaSimInterfaceZMQ::_get_joint_torque(const std::string &jointname)
+double DQ_CoppeliaSimInterfaceZMQ::_get_joint_force(const std::string &jointname)
 {
-    return _get_joint_torque(_get_handle_from_map(jointname));
+    return _get_joint_force(_get_handle_from_map(jointname));
 }
 
 /**
- * @brief DQ_CoppeliaSimInterfaceZMQ::get_joint_torques
- * @param handles
- * @return
+ * @brief DQ_CoppeliaSimInterfaceZMQ::get_joint_forces retrieves the joint forces or torques
+ *          along/about their active axis.
+ * @param handles A vector containing the handles of the joints.
+ * @return The joint forces
  */
-VectorXd DQ_CoppeliaSimInterfaceZMQ::_get_joint_torques(const std::vector<int> &handles) const
+VectorXd DQ_CoppeliaSimInterfaceZMQ::_get_joint_forces(const std::vector<int> &handles) const
 {
     int n = handles.size();
     VectorXd joint_torques(n);
     for(auto i=0;i<n;i++)
-        joint_torques(i)=_get_joint_torque(handles.at(i));
+        joint_torques(i)=_get_joint_force(handles.at(i));
 
     return joint_torques;
 }
 
 /**
- * @brief DQ_CoppeliaSimInterfaceZMQ::get_joint_torques gets the joint torques in the CoppeliaSim scene.
+ * @brief DQ_CoppeliaSimInterfaceZMQ::get_joint_forces gets the joint forces in the CoppeliaSim scene.
  * @param jointnames A vector containing the names of the joints.
- * @return the joint torques.
+ * @return the joint forces.
  */
-VectorXd DQ_CoppeliaSimInterfaceZMQ::get_joint_torques(const std::vector<std::string> &jointnames)
+VectorXd DQ_CoppeliaSimInterfaceZMQ::get_joint_forces(const std::vector<std::string> &jointnames)
 {
     int n = jointnames.size();
-    VectorXd joint_torques(n);
+    VectorXd joint_forces(n);
     for(auto i=0;i<n;i++)
-        joint_torques(i)=_get_joint_torque(jointnames.at(i));
+        joint_forces(i)=_get_joint_force(jointnames.at(i));
 
-    return joint_torques;
+    return joint_forces;
 }
 
 /**
