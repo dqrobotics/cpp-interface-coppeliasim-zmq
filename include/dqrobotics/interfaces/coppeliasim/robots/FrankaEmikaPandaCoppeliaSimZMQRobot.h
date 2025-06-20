@@ -1,5 +1,5 @@
 /**
-(C) Copyright 2024 DQ Robotics Developers
+(C) Copyright 2011-2025 DQ Robotics Developers
 
 This file is based on DQ Robotics.
 
@@ -25,7 +25,6 @@ Contributors:
 */
 
 #pragma once
-#include <vector>
 #include <dqrobotics/interfaces/coppeliasim/DQ_CoppeliaSimRobotZMQ.h>
 #include <dqrobotics/robot_modeling/DQ_SerialManipulatorMDH.h>
 
@@ -33,6 +32,8 @@ namespace DQ_robotics
 {
 class FrankaEmikaPandaCoppeliaSimZMQRobot: public DQ_CoppeliaSimRobotZMQ
 {
+protected:
+    std::string base_frame_name_;
 public:
     FrankaEmikaPandaCoppeliaSimZMQRobot(const std::string& robot_name,
                                         const std::shared_ptr<DQ_CoppeliaSimInterfaceZMQ>& coppeliasim_interface_sptr

@@ -1,5 +1,5 @@
 /**
-(C) Copyright 2024 DQ Robotics Developers
+(C) Copyright 2011-2025 DQ Robotics Developers
 
 This file is based on DQ Robotics.
 
@@ -30,228 +30,111 @@ Contributors:
 namespace DQ_robotics
 {
 
-
-
-void DQ_CoppeliaSimRobotZMQ::_initialize_jointnames_from_coppeliasim()
-{
-    jointnames_ = _get_exp_interface_sptr()->get_jointnames_from_parent_object(robot_name_);
-    base_frame_name_ = jointnames_.at(0);
-}
-
-
 /**
- * @brief DQ_SerialCoppeliaSimRobot::DQ_SerialCoppeliaSimRobot
- * @param robot_name
- * @param interface_sptr
+ * @brief DQ_CoppeliaSimRobotZMQ::_get_interface_sptr gets the smartpointer of the ZMQ-based CoppeliaSim interface
+ * @return The smartpointer of the CoppeliaSim interface.
  */
-DQ_CoppeliaSimRobotZMQ::DQ_CoppeliaSimRobotZMQ(const std::string &robot_name,
-                                                           const std::shared_ptr<DQ_CoppeliaSimInterfaceZMQ> &interface_sptr)
-    :DQ_CoppeliaSimRobot(robot_name), interface_sptr_{interface_sptr}
+std::shared_ptr<DQ_CoppeliaSimInterfaceZMQ> DQ_CoppeliaSimRobotZMQ::_get_interface_sptr() const
 {
-    coppeliasim_interface_sptr_ = std::make_shared<DQ_CoppeliaSimInterfaceZMQ::experimental>(interface_sptr_);
-    _initialize_jointnames_from_coppeliasim();
-    // By Default, the robot is controlled by joint positions with both the dynamic engine
-    // and the stepping mode enabled.
-    joint_control_mode_ = DQ_CoppeliaSimInterfaceZMQ::JOINT_CONTROL_MODE::POSITION;
-    robot_is_used_as_visualization_tool_ = false;
-}
-
-std::shared_ptr<DQ_CoppeliaSimInterfaceZMQ> DQ_CoppeliaSimRobotZMQ::_get_interface_sptr()
-{
-    return interface_sptr_;
+    if(!cs_zmq_)
+        throw std::runtime_error("DQ_CoppeliaSimInterfaceZMQ::_get_interface_sptr invalid interface pointer");
+    return cs_zmq_;
 }
 
 /**
- * @brief DQ_SerialCoppeliaSimRobot::_initialize_jointnames_from_coppeliasim
+ * @brief DQ_CoppeliaSimRobotZMQ::_get_jointnames gets the robot joint names used in CoppeliaSim
+ * @return the robot joint names.
  */
-std::shared_ptr<DQ_CoppeliaSimInterfaceZMQ::experimental> DQ_CoppeliaSimRobotZMQ::_get_exp_interface_sptr()
-{
-    return coppeliasim_interface_sptr_;
-}
-
-/**
- * @brief DQ_SerialCoppeliaSimRobot::set_operation_modes
- * @param joint_mode
- * @param joint_control_mode
- */
-void DQ_CoppeliaSimRobotZMQ::_set_operation_modes(const DQ_CoppeliaSimInterfaceZMQ::JOINT_MODE &joint_mode, const DQ_CoppeliaSimInterfaceZMQ::JOINT_CONTROL_MODE &joint_control_mode)
-{
-    joint_control_mode_ = joint_control_mode;
-    _get_exp_interface_sptr()->set_joint_modes(jointnames_, joint_mode);
-    _get_exp_interface_sptr()->set_joint_control_modes(jointnames_, joint_control_mode);
-}
-
-/**
- * @brief DQ_SerialCoppeliaSimRobot::set_robot_as_visualization_tool enables the joint
- *        kinematic mode in the robot. Furthermore, both the stepping mode and the
- *        dynamic engine are disabled. Use this mode if you want to control the robot
- *        by joint position commands without taking into account the dynamics.
- *        In other words, the CoppeliaSim scene is used as a visualization tool.
- */
-void DQ_CoppeliaSimRobotZMQ::_set_robot_as_visualization_tool()
-{
-    _get_interface_sptr()->set_stepping_mode(false);
-    _get_exp_interface_sptr()->enable_dynamics(false);
-    _get_exp_interface_sptr()->set_joint_modes(jointnames_,
-                                           DQ_CoppeliaSimInterfaceZMQ::JOINT_MODE::KINEMATIC);
-    robot_is_used_as_visualization_tool_ = true;
-}
-
-/**
- * @brief DQ_SerialCoppeliaSimRobot::set_robot_as_dynamic_tool enables the joint
- *        dynamic mode in the robot. Furthermore, both the dynamic engine and the stepping mode are enabled.
- *        Use this mode if you want to control the robot
- *        by target joint commands in stepped mode taking into account the dynamics.
- *
- * @param joint_control_mode Use POSITION, VELOCITY or TORQUE.
- */
-void DQ_CoppeliaSimRobotZMQ::_set_robot_as_dynamic_tool(const DQ_CoppeliaSimInterfaceZMQ::JOINT_CONTROL_MODE &joint_control_mode)
-{
-    _get_exp_interface_sptr()->enable_dynamics(true);
-    _get_interface_sptr()->set_stepping_mode(true);
-    _set_joint_control_type(joint_control_mode);
-}
-
-/**
- * @brief DQ_SerialCoppeliaSimRobot::set_joint_control_type sets the joint control mode
- *        of the robot.
- * @param joint_control_mode Use POSITION, VELOCITY or TORQUE.
- */
-void DQ_CoppeliaSimRobotZMQ::_set_joint_control_type(const DQ_CoppeliaSimInterfaceZMQ::JOINT_CONTROL_MODE &joint_control_mode)
-{
-    _set_operation_modes(DQ_CoppeliaSimInterfaceZMQ::JOINT_MODE::DYNAMIC, joint_control_mode);
-}
-
-/**
- * @brief DQ_SerialCoppeliaSimRobot::set_control_inputs sends the commands to CoppeliaSim.
- *
- * @param u joint positions, velocities or torques.
- */
-void DQ_CoppeliaSimRobotZMQ::_set_control_inputs(const VectorXd &u)
-{
-    if (robot_is_used_as_visualization_tool_)
-        _get_interface_sptr()->set_joint_positions(jointnames_, u);
-    else
-    {
-        switch (joint_control_mode_)
-        {
-        case DQ_CoppeliaSimInterfaceZMQ::JOINT_CONTROL_MODE::FREE:
-            break;
-        case DQ_CoppeliaSimInterfaceZMQ::JOINT_CONTROL_MODE::FORCE:
-            break;
-        case DQ_CoppeliaSimInterfaceZMQ::JOINT_CONTROL_MODE::VELOCITY:
-            _get_interface_sptr()->set_joint_target_velocities(jointnames_, u);
-            break;
-        case DQ_CoppeliaSimInterfaceZMQ::JOINT_CONTROL_MODE::POSITION:
-            _get_interface_sptr()->set_joint_target_positions(jointnames_, u);
-            break;
-        case DQ_CoppeliaSimInterfaceZMQ::JOINT_CONTROL_MODE::SPRING:
-            break;
-        case DQ_CoppeliaSimInterfaceZMQ::JOINT_CONTROL_MODE::CUSTOM:
-            break;
-        case DQ_CoppeliaSimInterfaceZMQ::JOINT_CONTROL_MODE::TORQUE:
-            _get_interface_sptr()->set_joint_torques(jointnames_, u);
-            break;
-        }
-        _get_interface_sptr()->trigger_next_simulation_step();
-    }
-}
-
-std::vector<std::string> DQ_CoppeliaSimRobotZMQ::get_joint_names()
+std::vector<std::string> DQ_CoppeliaSimRobotZMQ::_get_jointnames() const
 {
     return jointnames_;
 }
 
 
 /**
- * @brief DQ_SerialCoppeliaSimRobot::set_configuration_space_positions
- * @param q
+ * @brief DQ_CoppeliaSimRobotZMQ::DQ_CoppeliaSimRobotZMQ constructor of the class.
+ * @param robot_name The name of the robot used in CoppeliaSim
+ * @param interface_sptr The CoppeliaSim Interface
  */
-void DQ_CoppeliaSimRobotZMQ::set_configuration_space(const VectorXd &q)
+DQ_CoppeliaSimRobotZMQ::DQ_CoppeliaSimRobotZMQ(const std::string &robot_name,
+                                               const std::shared_ptr<DQ_CoppeliaSimInterfaceZMQ> &interface_sptr)
+    :DQ_CoppeliaSimRobot()
 {
-    _get_interface_sptr()->set_joint_positions(jointnames_,q);
+    if (!interface_sptr)
+        throw std::runtime_error("DQ_CoppeliaSimRobotZMQ:::DQ_CoppeliaSimRobotZMQ Invalid DQ_CoppeliaSimInterfaceZMQ pointer!");
+    robot_name_ = robot_name;
+    cs_zmq_ = interface_sptr;
+    jointnames_ = cs_zmq_->get_jointnames_from_object(robot_name_);
+}
+
+/**
+ * @brief DQ_CoppeliaSimRobotZMQ::set_configuration sets the robot configuration in the CoppeliaSim scene.
+                                 It is required a dynamics disabled scene.
+ * @param configuration The robot configuration
+ */
+void DQ_CoppeliaSimRobotZMQ::set_configuration(const VectorXd &configuration)
+{
+    cs_zmq_->set_joint_positions(jointnames_, configuration);
+}
+
+/**
+ * @brief DQ_CoppeliaSimRobotZMQ::set_target_configuration This method sets the target robot configuration in the
+                                 CoppeliaSim scene. It requires a dynamics-enabled scene
+ * @param target_configuration The target configuration
+ */
+void DQ_CoppeliaSimRobotZMQ::set_target_configuration(const VectorXd &target_configuration)
+{
+    cs_zmq_->set_joint_target_positions(jointnames_, target_configuration);
+}
+
+/**
+ * @brief DQ_CoppeliaSimRobotZMQ::set_target_configuration_velocities This method sets the target robot configuration velocities in the CoppeliaSim scene.
+                                It requires a dynamics-enabled scene.
+ * @param target_configuration_velocities  The target configuration velocities.
+ */
+void DQ_CoppeliaSimRobotZMQ::set_target_configuration_velocities(const VectorXd &target_configuration_velocities)
+{
+    cs_zmq_->set_joint_target_velocities(jointnames_, target_configuration_velocities);
 }
 
 
 /**
- * @brief DQ_SerialCoppeliaSimRobot::get_configuration_space_positions
- * @return
+ * @brief DQ_CoppeliaSimRobotZMQ::set_target_configuration_forces This method sets the target robot configuration forces in the CoppeliaSim scene.
+                                 It requires a dynamics-enabled scene.
+ * @param target_configuration_forces The target configuration forces.
  */
-VectorXd DQ_CoppeliaSimRobotZMQ::get_configuration_space()
+void DQ_CoppeliaSimRobotZMQ::set_target_configuration_forces(const VectorXd &target_configuration_forces)
 {
-    return  _get_interface_sptr()->get_joint_positions(jointnames_);
+   cs_zmq_->set_joint_target_forces(jointnames_, target_configuration_forces);
+}
+
+/**
+ * @brief DQ_CoppeliaSimRobotZMQ::get_configuration This method returns the robot configuration in the CoppeliaSim scene.
+ * @return The robot configuration
+ */
+VectorXd DQ_CoppeliaSimRobotZMQ::get_configuration()
+{
+    return  cs_zmq_->get_joint_positions(jointnames_);
 }
 
 
 /**
- * @brief DQ_SerialCoppeliaSimRobot::set_target_configuration_space_positions
- * @param q_target
+ * @brief DQ_CoppeliaSimRobotZMQ::get_configuration_velocities This method returns the robot configuration velocities in the CoppeliaSim scene.
+ * @return The configuration velocities.
  */
-void DQ_CoppeliaSimRobotZMQ::set_target_configuration_space(const VectorXd &q_target)
+VectorXd DQ_CoppeliaSimRobotZMQ::get_configuration_velocities()
 {
-    _get_interface_sptr()->set_joint_target_positions(jointnames_, q_target);
+    return  cs_zmq_->get_joint_velocities(jointnames_);
 }
 
 
 /**
- * @brief DQ_SerialCoppeliaSimRobot::get_configuration_space_velocities
- * @return
+ * @brief DQ_CoppeliaSimRobotZMQ::get_configuration_forces This method returns the robot configuration forces in the CoppeliaSim scene.
+ * @return The configuration forces.
  */
-VectorXd DQ_CoppeliaSimRobotZMQ::get_configuration_space_velocities()
+VectorXd DQ_CoppeliaSimRobotZMQ::get_configuration_forces()
 {
-    return _get_interface_sptr()->get_joint_velocities(jointnames_);
-}
-
-/**
- * @brief DQ_SerialCoppeliaSimRobot::set_target_configuration_space_velocities
- * @param v_target
- */
-void DQ_CoppeliaSimRobotZMQ::set_target_configuration_space_velocities(const VectorXd &v_target)
-{
-    _get_interface_sptr()->set_joint_target_velocities(jointnames_, v_target);
-}
-
-/**
- * @brief DQ_SerialCoppeliaSimRobot::set_configuration_space_torques
- * @param torques
- */
-void DQ_CoppeliaSimRobotZMQ::set_configuration_space_torques(const VectorXd &torques)
-{
-    _get_interface_sptr()->set_joint_torques(jointnames_, torques);
-}
-
-/**
- * @brief DQ_SerialCoppeliaSimRobot::get_configuration_space_torques
- * @return
- */
-VectorXd DQ_CoppeliaSimRobotZMQ::get_configuration_space_torques()
-{
-    return _get_interface_sptr()->get_joint_torques(jointnames_);
-}
-
-void DQ_CoppeliaSimRobotZMQ::send_q_to_vrep(const VectorXd &q)
-{
-    DQ_CoppeliaSimRobotZMQ::set_configuration_space(q);
-}
-
-VectorXd DQ_CoppeliaSimRobotZMQ::get_q_from_vrep()
-{
-    return DQ_CoppeliaSimRobotZMQ::get_configuration_space();
-}
-
-void DQ_CoppeliaSimRobotZMQ::set_configuration_space_positions(const VectorXd &q)
-{
-    DQ_CoppeliaSimRobotZMQ::set_configuration_space(q);
-}
-
-VectorXd DQ_CoppeliaSimRobotZMQ::get_configuration_space_positions()
-{
-    return DQ_CoppeliaSimRobotZMQ::get_configuration_space();
-}
-
-void DQ_CoppeliaSimRobotZMQ::set_target_configuration_space_positions(const VectorXd &q_target)
-{
-    DQ_CoppeliaSimRobotZMQ::set_target_configuration_space(q_target);
+    return  cs_zmq_->get_joint_forces(jointnames_);
 }
 
 }

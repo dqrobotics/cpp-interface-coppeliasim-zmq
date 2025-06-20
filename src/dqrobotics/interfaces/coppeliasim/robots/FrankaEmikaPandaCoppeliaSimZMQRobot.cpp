@@ -1,5 +1,5 @@
 /**
-(C) Copyright 2024 DQ Robotics Developers
+(C) Copyright 2011-2025 DQ Robotics Developers
 
 This file is based on DQ Robotics.
 
@@ -37,10 +37,11 @@ namespace DQ_robotics
  * @param robot_name
  * @param coppeliasim_interface_sptr
  */
-FrankaEmikaPandaCoppeliaSimZMQRobot::FrankaEmikaPandaCoppeliaSimZMQRobot(const std::string &robot_name, const std::shared_ptr<DQ_CoppeliaSimInterfaceZMQ> &coppeliasim_interface_sptr)
+FrankaEmikaPandaCoppeliaSimZMQRobot::FrankaEmikaPandaCoppeliaSimZMQRobot(const std::string &robot_name,
+                                                                         const std::shared_ptr<DQ_CoppeliaSimInterfaceZMQ> &coppeliasim_interface_sptr)
     :DQ_CoppeliaSimRobotZMQ(robot_name, coppeliasim_interface_sptr)
 {
-
+    base_frame_name_ = _get_jointnames().at(0);
 }
 
 /**
