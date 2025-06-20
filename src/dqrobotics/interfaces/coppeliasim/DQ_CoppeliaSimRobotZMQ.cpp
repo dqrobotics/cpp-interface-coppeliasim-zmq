@@ -30,19 +30,29 @@ Contributors:
 namespace DQ_robotics
 {
 
+/**
+ * @brief DQ_CoppeliaSimRobotZMQ::_get_interface_sptr gets the smartpointer of the ZMQ-based CoppeliaSim interface
+ * @return The smartpointer of the CoppeliaSim interface.
+ */
+std::shared_ptr<DQ_CoppeliaSimInterfaceZMQ> DQ_CoppeliaSimRobotZMQ::_get_interface_sptr() const
+{
+    if(!cs_zmq_)
+        throw std::runtime_error("DQ_CoppeliaSimInterfaceZMQ::_get_interface_sptr invalid interface pointer");
+    return cs_zmq_;
+}
 
 
 /**
- * @brief DQ_SerialCoppeliaSimRobot::DQ_SerialCoppeliaSimRobot
- * @param robot_name
- * @param interface_sptr
+ * @brief DQ_CoppeliaSimRobotZMQ::DQ_CoppeliaSimRobotZMQ constructor of the class.
+ * @param robot_name The name of the robot used in CoppeliaSim
+ * @param interface_sptr The CoppeliaSim Interface
  */
 DQ_CoppeliaSimRobotZMQ::DQ_CoppeliaSimRobotZMQ(const std::string &robot_name,
                                                const std::shared_ptr<DQ_CoppeliaSimInterfaceZMQ> &interface_sptr)
     :DQ_CoppeliaSimRobot()
 {
     if (!interface_sptr)
-        throw std::runtime_error("DQ_CoppeliaSimRobotZMQ: Invalid DQ_CoppeliaSimInterfaceZMQ pointer!");
+        throw std::runtime_error("DQ_CoppeliaSimRobotZMQ:::DQ_CoppeliaSimRobotZMQ Invalid DQ_CoppeliaSimInterfaceZMQ pointer!");
     robot_name_ = robot_name;
     cs_zmq_ = interface_sptr;
     jointnames_ = cs_zmq_->get_jointnames_from_object(robot_name_);
