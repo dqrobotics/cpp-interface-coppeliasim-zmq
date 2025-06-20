@@ -70,9 +70,9 @@ public:
     VectorXd get_joint_velocities(const std::vector<std::string>& jointnames) override;
     void     set_joint_target_velocities(const std::vector<std::string>& jointnames,
                                      const VectorXd& angles_rad_dot) override;
-    void     set_joint_torques(const std::vector<std::string>& jointnames,
-                               const VectorXd& torques) override;
-    VectorXd get_joint_torques(const std::vector<std::string>& jointnames) override;
+    void     set_joint_target_forces(const std::vector<std::string>& jointnames,
+                               const VectorXd& forces) override;
+    VectorXd get_joint_forces(const std::vector<std::string>& jointnames) override;
 
     std::vector<std::string> get_jointnames_from_object(const std::string& objectname);
 
@@ -176,13 +176,13 @@ protected:
     void     _set_joint_target_velocity(const std::string& jointname, const double& angle_rad_dot);
     void     _set_joint_target_velocities(const std::vector<int>& handles, const VectorXd& angles_rad_dot) const;
 
-    void     _set_joint_torque(const int& handle, const double& torque) const;
-    void     _set_joint_torque(const std::string& jointname, const double& torque);
-    void     _set_joint_torques(const std::vector<int>& handles, const VectorXd& torques) const;
+    void     _set_joint_force(const int& handle, const double& force) const;
+    void     _set_joint_force(const std::string& jointname, const double& force);
+    void     _set_joint_forces(const std::vector<int>& handles, const VectorXd& forces) const;
 
-    double   _get_joint_torque(const int& handle) const;
-    double   _get_joint_torque(const std::string& jointname);
-    VectorXd _get_joint_torques(const std::vector<int>& handles) const;
+    double   _get_joint_force(const int& handle) const;
+    double   _get_joint_force(const std::string& jointname);
+    VectorXd _get_joint_forces(const std::vector<int>& handles) const;
 
 
     /**
