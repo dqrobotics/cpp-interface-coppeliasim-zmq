@@ -36,6 +36,7 @@ protected:
     std::vector<std::string> jointnames_;
     std::shared_ptr<DQ_CoppeliaSimInterfaceZMQ> cs_zmq_;
     std::shared_ptr<DQ_CoppeliaSimInterfaceZMQ> _get_interface_sptr() const;
+    std::vector<std::string> _get_jointnames() const;
 public:
     DQ_CoppeliaSimRobotZMQ(const std::string& robot_name,
                            const std::shared_ptr<DQ_CoppeliaSimInterfaceZMQ>& interface_sptr);

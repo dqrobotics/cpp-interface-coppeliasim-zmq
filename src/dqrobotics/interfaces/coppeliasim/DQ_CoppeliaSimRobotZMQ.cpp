@@ -41,6 +41,15 @@ std::shared_ptr<DQ_CoppeliaSimInterfaceZMQ> DQ_CoppeliaSimRobotZMQ::_get_interfa
     return cs_zmq_;
 }
 
+/**
+ * @brief DQ_CoppeliaSimRobotZMQ::_get_jointnames gets the robot joint names used in CoppeliaSim
+ * @return the robot joint names.
+ */
+std::vector<std::string> DQ_CoppeliaSimRobotZMQ::_get_jointnames() const
+{
+    return jointnames_;
+}
+
 
 /**
  * @brief DQ_CoppeliaSimRobotZMQ::DQ_CoppeliaSimRobotZMQ constructor of the class.
